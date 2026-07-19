@@ -54,6 +54,24 @@ svg{width:16px;height:16px;vertical-align:-2px;fill:none}
 ::-webkit-scrollbar-thumb:hover{background:var(--metal-500)}
 ::-webkit-scrollbar-track{background:transparent}
 
+/* 任务式全程引导 */
+#guideSpot{
+  position:fixed;z-index:305;pointer-events:none;border:1.5px solid var(--signal-calm);border-radius:2px;
+  transition:all var(--motion-normal) var(--ease-system);
+  animation:gPulse 1.7s var(--ease-system) infinite;
+}
+@keyframes gPulse{0%,100%{box-shadow:0 0 0 0 rgba(169,187,183,.4)}50%{box-shadow:0 0 0 7px rgba(169,187,183,0)}}
+#guideBox{
+  position:fixed;left:16px;bottom:118px;z-index:306;width:min(310px,86vw);
+  background:var(--ink-150);border:1px solid var(--signal-calm);padding:14px 16px;
+  box-shadow:0 14px 50px rgba(0,0,0,.55);animation:tutIn var(--motion-fast) var(--ease-system);
+}
+.g-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.g-head .serif{font-size:15px;letter-spacing:.1em}
+#gText{font-size:12px;line-height:1.9;color:var(--text-secondary)}
+#gText b{color:var(--signal-calm);font-weight:400}
+.g-actions{margin-top:10px;border-top:1px solid var(--line);padding-top:8px;text-align:right}
+
 /* 暂停菜单 */
 .pause-sheet{width:min(400px,92vw)}
 .pause-menu{display:flex;flex-direction:column;gap:8px;margin-top:18px}

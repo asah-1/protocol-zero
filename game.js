@@ -570,6 +570,7 @@ async function pinClaims(claims, btn){
     S.flags.obj_pin = 1;
     renderEvidence(); toast("证词已固定 · 成本 1 分钟");
     checkObjectives(); save();
+    guideTick();
     await coachOnce("ev", "#railAnalysis", "证据板",
       "第一份证据已入板。证据板的玩法：点击两条材料将其选中，再指定关系（支持 / 冲突 / 因果……）。命中真实矛盾即可<b>发起质证</b>。记住：证词与证词无法互证——至少需要一份材料。");
   } else toast("该证词已在证据板上");
@@ -629,6 +630,7 @@ async function sendInput(){
   if (!raw && intent !== "silence"){ toast("输入为空 · 可先选择审讯动作"); return; }
   $("#inp").value = "";
   const text = raw || ({ silence:"（沉默）", empath:"（你表示理解与承诺）" }[intent] || "");
+  if (armed) S.flags.g_act = 1;  // 引导：已使用一次审讯动作
   setArmed(null);
   await playerAct(intent, text);
 }
@@ -673,6 +675,7 @@ async function playerAct(intent, text){
     if (!handled) await fallbackSay();
   }
   renderRisk();
+  guideTick();
 }
 
 /* 动作按钮 */
@@ -769,7 +772,7 @@ function toggleSel(id){
   const i = S.sel.indexOf(id);
   if (i >= 0) S.sel.splice(i,1);
   else { if (S.sel.length >= 2) S.sel.shift(); S.sel.push(id); }
-  renderEvidence(); renderSelInfo();
+  renderEvidence(); renderSelInfo(); guideTick();
 }
 function renderSelInfo(){
   $("#selInfo").textContent = S.sel.length ? `已选 ${S.sel.join(" + ")}` : "未选择";
@@ -804,6 +807,7 @@ function tryConnect(rel){
   if (S.sel.length !== 2){ toast("先在证据板选择两条材料"); return; }
   const [a,b] = S.sel;
   spend(2);
+  S.flags.g_rel = 1;  // 引导：已尝试建立关系
   const conn = findConn(a, b, rel);
   if (conn && !S.connections.some(c => (c.a===conn.a&&c.b===conn.b))){
     S.connections.push({ a:conn.a, b:conn.b, rel:conn.rel });
@@ -957,7 +961,7 @@ function openArchive(id){
   $("#archMeta").innerHTML =
     `<b>${a.code}</b>\n${esc(a.meta)}\n\n证据关联：${a.evidence}\n状态：${S.evidence.includes(a.evidence) ? "已框选" : "未框选"}\n\n操作：在正文上<b>划选文字</b>，选中关键段落即可框选为证据`;
   $("#archiveOv").classList.remove("hidden");
-  renderArchives(); checkObjectives(); save();
+  renderArchives(); checkObjectives(); save(); guideTick();
 }
 /* 真·文本划选框选 */
 document.addEventListener("mouseup", e => {
@@ -973,7 +977,7 @@ document.addEventListener("mouseup", e => {
       S.evidence.push(id); AU.pinS();
       hit.classList.add("pinned");
       toast(`关键段落已框选：${DATA.EVIDENCE[id].title}`);
-      renderEvidence(); save();
+      renderEvidence(); save(); guideTick();
     } else toast("该段落已在证据板上");
   } else if (sel.toString().trim().length >= 8){
     AU.paper();
@@ -989,7 +993,7 @@ function extractEvidence(){
     AU.pinS(); toast(`证据已框选：${DATA.EVIDENCE[id].title}`);
     const frag = $("#paperWrap .frag[data-ev='" + id + "']");
     if (frag) frag.classList.add("pinned");
-    renderEvidence();
+    renderEvidence(); guideTick();
   } else toast("该档案的关键段落已在证据板上");
 }
 
@@ -1635,6 +1639,7 @@ function renderTutStep(){
 /* 渐进式提示：随首次使用触发，只出现一次 */
 function coachOnce(id, sel, t, x){
   if (S.flags["cm_" + id]) return Promise.resolve();
+  if (guideActive() && (id === "pin" || id === "ev")){ S.flags["cm_" + id] = 1; return Promise.resolve(); } // 全程引导已覆盖
   S.flags["cm_" + id] = 1; save();
   return new Promise(res => {
     tutActive = "coach"; tutCoachDone = res;
@@ -1665,8 +1670,63 @@ async function endTutorial(){
   addSys("执行权限窗口开启 · 计时开始");
   save();
   await zeroSay(DATA.SCRIPT.find(r => r.id === "s0_first"));
+  S.flags.guide = 0; guideTick();  // 开启全程任务式引导
 }
-addEventListener("resize", () => { if (tutActive === true) renderTutStep(); });
+addEventListener("resize", () => { if (tutActive === true) renderTutStep(); guideRender(); });
+
+/* ---------------- 任务式全程引导（第一幕手把手） ---------------- */
+const GUIDE_STEPS = [
+  { sel:"#railArchives", t:"第 1 步 · 打开档案", x:"点击左栏档案卡<b>《数字遗嘱 · 公示版》</b>，阅读这份遗嘱。",
+    done:() => S.read.includes("doc_will") },
+  { sel:"#paperWrap", alt:"#archiveOv", t:"第 2 步 · 框选证据", x:"在正文上<b>按住鼠标划选第一条或第四条</b>，或点击底部「框选为证据」按钮。",
+    done:() => S.evidence.includes("ev_will") },
+  { sel:"#archiveOv", t:"第 3 步 · 关闭档案", x:"点击底部「<b>放回档案架</b>」（或按 <b>ESC</b>）关闭档案，回到审讯界面。",
+    done:() => $("#archiveOv").classList.contains("hidden") },
+  { sel:"#hintChips", alt:"#composer", t:"第 4 步 · 第一次提问", x:"点击输入区上方任一<b>提示词条</b>（或自己输入「你是谁」），按 <b>Enter</b> 发送。",
+    done:() => S.log.some(e => e.kind === "player") },
+  { sel:"#testimony", t:"第 5 步 · 固定证词", x:"把鼠标<b>悬停在零号刚才的回答上</b>，点击右侧出现的固定图标，把它的话钉成证据。",
+    done:() => S.evidence.some(id => id.startsWith("claim")) },
+  { sel:"#railAnalysis", t:"第 6 步 · 选中两条材料", x:"在右侧证据板<b>依次点击两条材料</b>（建议：刚固定的证词 + 遗嘱证据），让它们都处于选中态。",
+    done:() => S.sel.length >= 2 },
+  { sel:"#railAnalysis", t:"第 7 步 · 建立关系", x:"点击证据板下方的<b>关系词</b>（如「支持」），建立第一条证据关系——对错系统都会给出推理反馈。",
+    done:() => !!S.flags.g_rel },
+  { sel:"#cpActs", t:"第 8 步 · 使用审讯动作", x:"点击底栏动作「<b>复述</b>」，输入「你的身份」后发送——让它把说过的话重讲一遍。",
+    done:() => !!S.flags.g_act },
+  { sel:".an-tabs", t:"第 9 步 · 查看分析页签", x:"依次点击右栏「<b>连续性</b>」与「<b>权限风险</b>」两个页签，各看一眼内容。",
+    done:() => !!(S.flags.g_tab1 && S.flags.g_tab2) },
+];
+function guideActive(){ return typeof S.flags.guide === "number" && S.flags.guide < GUIDE_STEPS.length; }
+function guideRender(){
+  const spot = $("#guideSpot"), box = $("#guideBox");
+  if (!guideActive()){ spot.classList.add("hidden"); box.classList.add("hidden"); return; }
+  const st = GUIDE_STEPS[S.flags.guide];
+  $("#gTitle").textContent = st.t;
+  $("#gText").innerHTML = st.x;
+  $("#gStep").textContent = `${S.flags.guide + 1} / ${GUIDE_STEPS.length}`;
+  box.classList.remove("hidden");
+  let el = $(st.sel);
+  if ((!el || el.getBoundingClientRect().height < 4) && st.alt) el = $(st.alt);
+  if (el){
+    const r = el.getBoundingClientRect(), pad = 5;
+    spot.classList.remove("hidden");
+    spot.style.left = (r.left - pad) + "px";
+    spot.style.top = (r.top - pad) + "px";
+    spot.style.width = (r.width + pad * 2) + "px";
+    spot.style.height = (r.height + pad * 2) + "px";
+  } else spot.classList.add("hidden");
+}
+function guideTick(){
+  if (!guideActive()){ guideRender(); return; }
+  while (guideActive() && GUIDE_STEPS[S.flags.guide].done()) S.flags.guide++;
+  if (!guideActive()){
+    S.flags.guide = "off"; save(); guideRender();
+    AU.pinS();
+    addSys("操作引导完成 · 全部基础操作已实操一遍");
+    toast("全程引导完成 · 之后跟随顶栏目标条与提示词条即可", 4600);
+    return;
+  }
+  guideRender(); save();
+}
 function checkSign(){
   const all = $$("#clauseList .clause").every(c => c.classList.contains("signed"));
   const named = $("#signName").value.trim().length > 0;
@@ -1696,9 +1756,11 @@ async function enterApp(fresh){
     rerenderLog();
     if (S.act >= 5 && !S.sealed) openVerdict();
   }
-  setInterval(() => { $("#zsClock").textContent = "T-" + fmtTime(S.time); }, 1000);
+  setInterval(() => { $("#zsClock").textContent = "T-" + fmtTime(S.time); guideRender(); }, 1000);
   // 环境音事件：远处金属声（沉浸层）
   setInterval(() => { if (!SET.mute && Math.random() < .55) AU.clang(); }, 36000);
+  guideTick();  // 恢复未完成的全程引导（若有）
+  save();
   // LM-0 ↔ LIN MO 偶发闪烁（第三幕起）
   setInterval(() => {
     if (S.act >= 3 && Math.random() < .25 && !motionOff()){
@@ -1729,7 +1791,9 @@ function wireAll(){
     const map = { ev:"#anEv", cont:"#anCont", risk:"#anRisk" };
     Object.values(map).forEach(s => $(s).classList.add("hidden"));
     $(map[t.dataset.tab]).classList.remove("hidden");
-    AU.click();
+    if (t.dataset.tab === "cont") S.flags.g_tab1 = 1;
+    if (t.dataset.tab === "risk") S.flags.g_tab2 = 1;
+    AU.click(); guideTick();
   });
   // 顶栏
   $("#btnTimeline").onclick = openTimeline;
@@ -1749,6 +1813,7 @@ function wireAll(){
   $$("[data-close]").forEach(b => b.onclick = () => {
     const id = b.dataset.close;
     $("#" + id).classList.add("hidden"); AU.click();
+    guideTick();
     if (id === "archiveOv" && S.evidence.length && !S.flags.cm_ev)
       coachOnce("ev", "#railAnalysis", "证据板",
         "第一份证据已入板。证据板的玩法：点击两条材料将其选中，再指定关系（支持 / 冲突 / 因果……）。命中真实矛盾即可<b>发起质证</b>。记住：证词与证词无法互证——至少需要一份材料。");
@@ -1777,6 +1842,8 @@ function wireAll(){
   $("#pSettings").onclick = () => { AU.click(); $("#settingsOv").classList.remove("hidden"); };
   $("#pSave").onclick = () => { AU.pinS(); save(); toast("进度已保存"); };
   $("#pQuit").onclick = () => { save(); location.reload(); };
+  // 全程引导：跳过
+  $("#gSkip").onclick = () => { S.flags.guide = "off"; save(); guideRender(); AU.click(); toast("已关闭全程引导 · 可随时参考顶栏目标条"); };
   // 画像
   $("#revealClose").onclick = () => { AU.click(); closeReveal(); };
   // 裁决
