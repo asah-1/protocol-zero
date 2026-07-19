@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>零号遗嘱 · PROTOCOL ZERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700;900&family=Noto+Sans+SC:wght@350;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 噪点与网格层 -->
+<div id="grain" aria-hidden="true"></div>
+
+<!-- SVG 图标库 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-pin" viewBox="0 0 16 16"><path d="M4 2h8M8 2v7M5 9l3 5 3-5M3 14h10" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-link" viewBox="0 0 16 16"><path d="M6 10l4-4M4 8l2-2M10 10l2-2M3 13l3-3M10 6l3-3" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-file" viewBox="0 0 16 16"><path d="M4 1.5h5.5L13 5v9.5H4zM9.5 1.5V5H13" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 16 16"><rect x="3.5" y="7" width="9" height="7" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 4.5V8l2.5 2" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 1.5l6 2v5c0 3.5-2.5 5.5-6 7-3.5-1.5-6-3.5-6-7v-5z" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 16 16"><path d="M2 6v4h3l4 3.5v-11L5 6zM11 5.5a4 4 0 010 5" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 16 16"><path d="M2 6v4h3l4 3.5v-11L5 6zM11 6l4 4M15 6l-4 4" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M2 8h11M9 3.5L13.5 8 9 12.5" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-seal" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><circle cx="8" cy="8" r="2.5" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 16 16"><path d="M8 2v12M3 14h10M8 4L3 6l-1.5 4a2.5 2.5 0 005 0L5 6M8 4l5 2 1.5 4a2.5 2.5 0 01-5 0L11 6" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 16 16"><path d="M1.5 8S4 4 8 4s6.5 4 6.5 4-2.5 4-6.5 4S1.5 8 1.5 8z" fill="none" stroke="currentColor" stroke-width="1.25"/><circle cx="8" cy="8" r="1.75" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-scan" viewBox="0 0 16 16"><path d="M2 5V2h3M11 2h3v3M14 11v3h-3M5 14H2v-3M2 8h12" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 16 16"><path d="M1 8h2l1.5-4 2 8 2-6 1.5 2h5" fill="none" stroke="currentColor" stroke-width="1.25"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ 启动页 ============ -->
+<div id="boot">
+  <canvas id="bootViz" aria-hidden="true"></canvas>
+  <div class="boot-frame">
+    <header class="boot-head">
+      <span>NEURAL INTERFACE LEGACY AUTHORITY</span>
+      <span class="mono">DIGITAL ESTATE REVIEW TERMINAL · 07</span>
+      <span class="tag-box">OFFLINE / ISOLATED</span>
+    </header>
+    <main class="boot-main">
+      <div class="boot-case mono">CASE / LM-00 — TESTAMENT CONSISTENCY REVIEW</div>
+      <h1 class="boot-title">零号遗嘱</h1>
+      <div class="boot-sub">PROTOCOL ZERO</div>
+      <p class="boot-line">当死者要求你证明他仍然活着。</p>
+      <nav class="boot-menu" aria-label="主菜单">
+        <button id="btnContinue" class="boot-op hidden"><span class="op-key mono">01</span>继续审查<svg><use href="#i-arrow"/></svg></button>
+        <button id="btnNew" class="boot-op"><span class="op-key mono">02</span>建立新审查<svg><use href="#i-arrow"/></svg></button>
+        <button id="btnSettings" class="boot-op"><span class="op-key mono">03</span>系统设置<svg><use href="#i-arrow"/></svg></button>
+        <button id="btnWipe" class="boot-op"><span class="op-key mono">04</span>清除本地记录<svg><use href="#i-arrow"/></svg></button>
+      </nav>
+    </main>
+    <footer class="boot-foot">
+      <span>依据《连续人格备份管理条例》第 14 条，本终端一切输入将被记录并作为人格判定样本。</span>
+      <span class="mono dim" id="bootNet">NET: ISOLATED · SAVE: LOCAL</span>
+    </footer>
+  </div>
+</div>
+
+<!-- ============ 设置 ============ -->
+<div id="settingsOv" class="overlay hidden" role="dialog" aria-label="系统设置">
+  <div class="sheet">
+    <button class="sheet-close" data-close="settingsOv">✕</button>
+    <h2 class="serif">系统设置</h2>
+    <div class="set-row"><span>主音量</span><input type="range" id="setVol" min="0" max="100" value="70"></div>
+    <div class="set-row"><span>静音</span><button id="setMute" class="mini-op">关</button></div>
+    <div class="set-row"><span>减少动态效果</span><button id="setMotion" class="mini-op">跟随系统</button></div>
+    <div class="set-row"><span>人格视觉质量</span><button id="setQuality" class="mini-op">高</button></div>
+    <div class="set-row"><span>大字模式</span><button id="setFont" class="mini-op">关</button></div>
+    <div class="set-sect">在线演绎（LLM）</div>
+    <div class="set-row"><span>启用在线演绎</span><button id="setLlmOn" class="mini-op">开</button></div>
+    <div class="set-row col"><span>接口地址</span><input type="text" id="setLlmEp" class="set-inp" spellcheck="false"></div>
+    <div class="set-row col"><span>API Key</span><input type="password" id="setLlmKey" class="set-inp" spellcheck="false" autocomplete="off"></div>
+    <div class="set-row col"><span>模型</span><input type="text" id="setLlmModel" class="set-inp" spellcheck="false"></div>
+    <div class="set-row"><span>连接测试</span><button id="btnLlmTest" class="mini-op">测试</button></div>
+    <p class="dim small" id="llmStatus">开启后：规则未命中的自由提问由 LLM 在角色内演绎，第四幕画像与最终陈词将基于你的真实审讯记录生成。离线或失败时自动回落内置剧本，不影响通关。</p>
+    <p class="dim small">倒计时为行动成本制：每次审讯动作、档案读取与证据操作都会消耗执行窗口时间。辅助模式下可在设置中关闭实时压力——本作默认已采用公平成本制。</p>
+  </div>
+</div>
+
+<!-- ============ 身份验证页 ============ -->
+<div id="signon" class="hidden">
+  <div class="signon-frame">
+    <div class="mono dim">IDENTITY VERIFICATION · 校验员身份登记</div>
+    <h2 class="serif">条款签收</h2>
+    <p class="dim">在接触 LM-0 之前，请逐条签收以下条款。每一条都将被记录。</p>
+    <div id="clauseList" class="clause-list"></div>
+    <div class="sign-row">
+      <label for="signName" class="mono small dim">审查员代号 / SIGNATURE</label>
+      <input id="signName" type="text" maxlength="12" placeholder="输入你的代号" autocomplete="off">
+    </div>
+    <div class="sign-actions">
+      <button id="btnSign" class="inst-op" disabled><svg><use href="#i-scan"/></svg>确认签署并进入审查</button>
+      <span id="signHint" class="dim small">签收全部条款并签名后可继续</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 案情简报 ============ -->
+<div id="briefOv" class="overlay hidden" role="dialog" aria-label="案情简报">
+  <div class="brief-sheet">
+    <div class="brief-head">
+      <span class="mono dim">CASE BRIEFING / LM-00</span>
+      <span id="briefPage" class="mono dim">1 / 3</span>
+    </div>
+    <h2 class="serif" id="briefTitle">案件背景</h2>
+    <div id="briefBody"></div>
+    <div class="brief-actions">
+      <button id="briefPrev" class="mini-op">上一页</button>
+      <button id="briefNext" class="inst-op">下一页</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 主界面 ============ -->
+<div id="app" class="hidden">
+
+  <header id="sysbar">
+    <div class="sb-cell mono">CASE / LM-00</div>
+    <div class="sb-cell sb-act" id="sbAct">序章 · 签收死亡</div>
+    <div class="sb-cell sb-clock"><svg><use href="#i-clock"/></svg><span id="clockVal" class="mono">180:00</span><span class="dim small">执行窗口</span></div>
+    <div class="sb-cell"><span class="tag-box">OFFLINE / ISOLATED</span></div>
+    <div class="sb-cell sb-perm"><svg><use href="#i-shield"/></svg><span id="permVal" class="mono">ACCESS L1</span></div>
+    <div class="sb-cell sb-btns">
+      <button id="btnTimeline" class="sys-op"><svg><use href="#i-wave"/></svg>时间线</button>
+      <button id="btnObj" class="sys-op"><svg><use href="#i-eye"/></svg>目标</button>
+      <button id="btnSound2" class="sys-op"><svg><use href="#i-sound"/></svg></button>
+      <button id="btnSave2" class="sys-op"><svg><use href="#i-file"/></svg>存档</button>
+      <button id="btnExit" class="sys-op">✕</button>
+    </div>
+  </header>
+
+  <div id="objBar" role="button" tabindex="0" title="点击查看当前阶段全部目标">
+    <span id="objAct" class="mono">序章 · 目标 0/3</span>
+    <span id="objText">下一步：—</span>
+    <span class="obj-more mono dim">全部目标</span>
+  </div>
+
+  <div id="stage">
+    <!-- 左：档案栏 -->
+    <aside id="railArchives" aria-label="档案栏">
+      <div class="rail-head mono">ARCHIVE RAIL<span class="dim" id="archCount">0/0</span></div>
+      <div id="archGroups"></div>
+    </aside>
+
+    <!-- 中：人格 + 证词流 -->
+    <section id="stageCenter">
+      <div id="zeroStage">
+        <canvas id="zeroCanvas"></canvas>
+        <div class="zs-plate">
+          <span class="zs-id mono" id="zsId">LM-0</span>
+          <span class="zs-state mono" id="zsState">DORMANT</span>
+          <span class="zs-meters mono dim" id="zsMeters">ALERT <b id="zsAlert">12</b> · TRUST <b id="zsTrust">30</b></span>
+        </div>
+        <div class="zs-frame mono dim" aria-hidden="true"><span>SAMPLING BOUNDARY 07</span><span id="zsClock">—</span></div>
+      </div>
+      <div id="thinkLine" class="mono hidden" aria-live="polite"></div>
+      <div id="testimony" aria-live="polite"></div>
+    </section>
+
+    <!-- 右：分析栏 -->
+    <aside id="railAnalysis" aria-label="分析栏">
+      <div class="an-tabs" role="tablist">
+        <button class="an-tab active" data-tab="ev" role="tab">证据</button>
+        <button class="an-tab" data-tab="cont" role="tab">连续性</button>
+        <button class="an-tab" data-tab="risk" role="tab">权限风险</button>
+      </div>
+
+      <div id="anEv" class="an-panel">
+        <div class="an-hint">固定证词后，选择两条材料并指定关系。命中有效关系将触发系统确认。</div>
+        <div class="an-selrow">
+          <span id="selInfo" class="mono small dim">未选择</span>
+          <button id="btnSelClear" class="mini-op">清除</button>
+        </div>
+        <div class="rel-row" id="relRow">
+          <button class="rel-btn" data-rel="支持">支持</button>
+          <button class="rel-btn" data-rel="冲突">冲突</button>
+          <button class="rel-btn" data-rel="因果">因果</button>
+          <button class="rel-btn" data-rel="同源">同源</button>
+          <button class="rel-btn" data-rel="伪造">伪造</button>
+        </div>
+        <div id="evList"></div>
+      </div>
+
+      <div id="anCont" class="an-panel hidden">
+        <div class="an-hint">四项独立指标。数值为区间估计，不是精确科学结论。</div>
+        <div id="contList"></div>
+        <div class="cont-warn">高连续性不必然意味着「就是林默」；高分化也不意味着「不是人」。</div>
+      </div>
+
+      <div id="anRisk" class="an-panel hidden">
+        <div class="an-hint">你的语言与行为正在被记录，构成审查员画像。</div>
+        <div id="riskList"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- 底：输入区 -->
+  <footer id="composer">
+    <div class="cp-top">
+      <div class="cp-mount" id="mountSlot"><span class="dim small">证据挂载槽 — 在证据板点击「挂载」后可出示</span></div>
+      <div class="cp-cost mono dim" id="costHint">本次操作成本约 2 分钟</div>
+    </div>
+    <div id="hintChips"></div>
+    <div class="cp-acts" id="cpActs">
+      <button class="cp-act" data-act="probe">追问</button>
+      <button class="cp-act" data-act="present">出示</button>
+      <button class="cp-act" data-act="confront" id="cpConfront" disabled>对质</button>
+      <button class="cp-act" data-act="press">施压</button>
+      <button class="cp-act" data-act="empath">承诺</button>
+      <button class="cp-act" data-act="retell">复述</button>
+      <button class="cp-act" data-act="deceive">欺骗</button>
+      <button class="cp-act" data-act="meta">元问题</button>
+      <button class="cp-act" data-act="silence">沉默</button>
+    </div>
+    <div class="cp-input">
+      <div class="cp-ruler" aria-hidden="true"></div>
+      <textarea id="inp" rows="2" placeholder="输入证词记录…… 自由追问、施压、许诺或设陷。Enter 发送，Shift+Enter 换行。"></textarea>
+      <button id="btnSend" class="inst-op"><svg><use href="#i-arrow"/></svg>记录</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ============ 档案阅读器 ============ -->
+<div id="archiveOv" class="overlay hidden" role="dialog" aria-label="档案阅读器">
+  <div class="workbench">
+    <div class="wb-marks mono dim" aria-hidden="true"><span>EXAMINATION BENCH</span><span id="wbScale">SCALE 1:1 · DOC CAM 04</span></div>
+    <div id="paperWrap"></div>
+    <div class="wb-side">
+      <div id="archMeta" class="mono"></div>
+      <button id="btnExtract" class="inst-op"><svg><use href="#i-pin"/></svg>框选为证据</button>
+      <button class="mini-op" data-close="archiveOv">放回档案架</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 时间线工作台 ============ -->
+<div id="timelineOv" class="overlay hidden" role="dialog" aria-label="时间线重建">
+  <div class="tl-bench">
+    <div class="tl-bench-head">
+      <span class="mono">TIMELINE RECONSTRUCTION · 事故前 24 小时 / 12 槽位</span>
+      <button class="mini-op" data-close="timelineOv">离开工作台</button>
+    </div>
+    <div class="an-hint">点击事件卡，再点击槽位放入。部分事件时间模糊，需借对话与元数据收紧。拼出关键链条可触发「回放」。</div>
+    <div id="tlPool"></div>
+    <div id="tlTrack"></div>
+    <div id="tlStatus" class="mono"></div>
+  </div>
+</div>
+
+<!-- ============ 93 秒回放 ============ -->
+<div id="replayOv" class="overlay hidden">
+  <canvas id="replayCanvas"></canvas>
+  <div id="replayHud" class="mono"></div>
+  <div id="replayStamp" class="hidden">DELAY CONFIRMED</div>
+  <button id="replaySkip" class="mini-op">跳过回放</button>
+</div>
+
+<!-- ============ 审查员画像反转 ============ -->
+<div id="revealOv" class="overlay hidden">
+  <div class="reveal-frame">
+    <div class="mono dim" id="revealHead">EXAMINER PROFILE — 审查员样本分析</div>
+    <div id="revealBody"></div>
+    <button id="revealClose" class="inst-op hidden">取回控制权</button>
+  </div>
+</div>
+
+<!-- ============ 裁决书 ============ -->
+<div id="verdictOv" class="overlay hidden">
+  <div class="verdict-doc">
+    <div class="vd-head">
+      <span class="mono dim">FINAL VERDICT · CASE / LM-00</span>
+      <h2 class="serif">遗嘱一致性审查 · 最终裁决书</h2>
+      <p class="dim small">逐项签署。每项确认后不可撤回。本裁决具有法律效力。</p>
+    </div>
+    <div id="vdItems"></div>
+    <div class="vd-sign">
+      <div class="vd-sigline mono" id="vdSigLine">SIGNATURE: —</div>
+      <button id="btnSeal" class="inst-op danger-op" disabled><svg><use href="#i-seal"/></svg>长按盖章 · 提交裁决</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 结局 ============ -->
+<div id="endingOv" class="overlay hidden">
+  <div class="ending-frame">
+    <div class="mono dim" id="endCode">VERDICT RECORDED</div>
+    <h2 class="serif" id="endTitle">—</h2>
+    <div id="endBody"></div>
+    <div id="endProfile" class="profile-report"></div>
+    <div class="end-actions">
+      <button id="btnRestart" class="inst-op">建立新审查</button>
+      <button id="btnEndBoot" class="mini-op">返回终端首页</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 新手引导 ============ -->
+<div id="tutOv" class="hidden">
+  <div id="tutSpot"></div>
+  <div id="tutTip" role="dialog" aria-label="操作引导">
+    <div class="tut-head"><span id="tutTitle" class="serif">—</span><span id="tutStep" class="mono dim">1 / 9</span></div>
+    <div id="tutText"></div>
+    <div class="tut-actions">
+      <button id="tutSkip" class="mini-op">跳过引导</button>
+      <button id="tutNext" class="inst-op">下一步</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 暂停菜单（ESC） ============ -->
+<div id="pauseOv" class="overlay hidden" role="dialog" aria-label="暂停菜单">
+  <div class="sheet pause-sheet">
+    <h2 class="serif">审查暂停</h2>
+    <p class="dim small">窗口为行动成本制——暂停期间时间不流失。</p>
+    <nav class="pause-menu">
+      <button id="pResume" class="boot-op"><span class="op-key mono">01</span>继续审查<svg><use href="#i-arrow"/></svg></button>
+      <button id="pSettings" class="boot-op"><span class="op-key mono">02</span>系统设置<svg><use href="#i-arrow"/></svg></button>
+      <button id="pSave" class="boot-op"><span class="op-key mono">03</span>保存进度<svg><use href="#i-arrow"/></svg></button>
+      <button id="pQuit" class="boot-op"><span class="op-key mono">04</span>退出到主菜单<svg><use href="#i-arrow"/></svg></button>
+    </nav>
+  </div>
+</div>
+
+<!-- 章节过场卡 -->
+<div id="actCard" class="hidden" aria-hidden="true">
+  <div class="ac-no mono" id="acNo">ACT 01</div>
+  <div class="ac-title serif" id="acTitle">第一幕</div>
+  <div class="ac-sub mono" id="acSub">一个人的两份记忆</div>
+  <div class="ac-line"></div>
+</div>
+
+<!-- 盖章层 / 提示 -->
+<div id="stampLayer" class="hidden" aria-hidden="true"><div id="stampText">CONTRADICTION CONFIRMED</div></div>
+<div id="toast" class="mono hidden" role="status"></div>
+
+<script src="api.config.js"></script>
+<script src="data.js"></script>
+<script src="llm.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
