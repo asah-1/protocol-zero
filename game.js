@@ -1676,13 +1676,13 @@ addEventListener("resize", () => { if (tutActive === true) renderTutStep(); guid
 
 /* ---------------- 任务式全程引导（第一幕手把手） ---------------- */
 const GUIDE_STEPS = [
-  { sel:"#railArchives", t:"第 1 步 · 打开档案", x:"点击左栏档案卡<b>《数字遗嘱 · 公示版》</b>，阅读这份遗嘱。",
+  { sel:"#railArchives", pos:"br", t:"第 1 步 · 打开档案", x:"点击左栏档案卡<b>《数字遗嘱 · 公示版》</b>，阅读这份遗嘱。",
     done:() => S.read.includes("doc_will") },
   { sel:"#paperWrap", alt:"#archiveOv", t:"第 2 步 · 框选证据", x:"在正文上<b>按住鼠标划选第一条或第四条</b>，或点击底部「框选为证据」按钮。",
     done:() => S.evidence.includes("ev_will") },
   { sel:"#archiveOv", t:"第 3 步 · 关闭档案", x:"点击底部「<b>放回档案架</b>」（或按 <b>ESC</b>）关闭档案，回到审讯界面。",
     done:() => $("#archiveOv").classList.contains("hidden") },
-  { sel:"#hintChips", alt:"#composer", t:"第 4 步 · 第一次提问", x:"点击输入区上方任一<b>提示词条</b>（或自己输入「你是谁」），按 <b>Enter</b> 发送。",
+  { sel:"#hintChips", alt:"#composer", pos:"tr", t:"第 4 步 · 第一次提问", x:"点击输入区上方任一<b>提示词条</b>（或自己输入「你是谁」），按 <b>Enter</b> 发送。",
     done:() => S.log.some(e => e.kind === "player") },
   { sel:"#testimony", t:"第 5 步 · 固定证词", x:"把鼠标<b>悬停在零号刚才的回答上</b>，点击右侧出现的固定图标，把它的话钉成证据。",
     done:() => S.evidence.some(id => id.startsWith("claim")) },
@@ -1703,6 +1703,12 @@ function guideRender(){
   $("#gTitle").textContent = st.t;
   $("#gText").innerHTML = st.x;
   $("#gStep").textContent = `${S.flags.guide + 1} / ${GUIDE_STEPS.length}`;
+  // 引导框位置避让：默认左下；br=右下；tr=右上。绝不遮挡目标交互区
+  const p = st.pos || "bl";
+  box.style.left = p === "bl" ? "16px" : "auto";
+  box.style.right = p === "bl" ? "auto" : "16px";
+  box.style.top = p === "tr" ? "120px" : "auto";
+  box.style.bottom = p === "tr" ? "auto" : "118px";
   box.classList.remove("hidden");
   let el = $(st.sel);
   if ((!el || el.getBoundingClientRect().height < 4) && st.alt) el = $(st.alt);
@@ -1721,7 +1727,6 @@ function guideTick(){
   if (!guideActive()){
     S.flags.guide = "off"; save(); guideRender();
     AU.pinS();
-    addSys("操作引导完成 · 全部基础操作已实操一遍");
     toast("全程引导完成 · 之后跟随顶栏目标条与提示词条即可", 4600);
     return;
   }
