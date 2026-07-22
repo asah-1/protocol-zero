@@ -616,17 +616,16 @@ ENDINGS: {
 
 /* ---------- 案情简报（进审讯室前） ---------- */
 BRIEFING: [
-  { title:"案件背景", body:`
-    <img class="b-img" src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=abandoned%20futuristic%20laboratory%20at%20night%2C%20holographic%20monitors%20glowing%20faintly%20over%20a%20single%20empty%20chair%2C%20dark%20forensic%20photography%2C%20ink%20black%20and%20bone%20white%20palette%2C%20subtle%20red%20accent%20light%2C%20cinematic%2C%20mysterious%2C%20no%20text&image_size=landscape_16_9" alt="" onerror="this.remove()">
+  { title:"案件背景", img:"assets/brief-lab.jpg", body:`
     <p>三个月前，神经接口公司创始人<b>林默</b>被发现死于自己的私人实验室。死因为实验并发症，现场无第二人。官方定性：事故。</p>
     <p>林默生前登记过<span class="b-key">连续人格备份</span>。他死后，其人格镜像<b>「零号」（LM-0）</b>依据一份数字遗嘱，申请继承林默的身份、资产与公司控制权。</p>
     <p>法律不承认镜像自动具有人格。遗嘱规定：由一名校验员在 <span class="b-red">180 分钟</span>内完成一致性审查，裁决零号究竟是<b>死者本人</b>、<b>独立人格</b>，还是<b>一件工具</b>。</p>
     <p>你是本案指定的校验员。你的裁决具有法律效力，且不可撤回。</p>` },
   { title:"核心人物", body:`
-    <div class="b-fig"><div class="f-name">林默<span class="mono">LIN MO · 死者</span></div><div class="f-desc">天才，控制欲极强。明知实验不可逆仍推进参数，并把遗嘱设计成一场「考试」。事故当晚 23:41，他启动了删除零号的终止程序。</div></div>
-    <div class="b-fig"><div class="f-name">零号<span class="mono">LM-0 · 受审者</span></div><div class="f-desc">林默的人格镜像，冷静、精确，声称记得林默的一生。事故当晚它在实验室。它申请了继承——也延迟过那 93 秒的警报。</div></div>
-    <div class="b-fig"><div class="f-name">许栀<span class="mono">XU ZHI · 前合伙人</span></div><div class="f-desc">零号早期架构师，与林默分道扬镳。公开主张「立即销毁零号」。她的证词需要核对。</div></div>
-    <div class="b-fig"><div class="f-name">陈渡<span class="mono">CHEN DU · 遗嘱执行人</span></div><div class="f-desc">代理律师，催促「从速认定」。其机构与遗产受益方存在服务关系——他要的是生效，未必是真相。</div></div>
+    <div class="b-fig" data-person="linmo"><div class="f-img"><img src="assets/p-linmo.jpg" alt="林默" onerror="this.style.display='none'"></div><div class="f-main"><div class="f-name">林默<span class="mono">LIN MO · 死者</span></div><div class="f-desc">天才，控制欲极强。明知实验不可逆仍推进参数，并把遗嘱设计成一场「考试」。事故当晚 23:41，他启动了删除零号的终止程序。</div></div></div>
+    <div class="b-fig" data-person="lm0"><div class="f-img"><img src="assets/p-lm0.jpg" alt="零号" onerror="this.style.display='none'"></div><div class="f-main"><div class="f-name">零号<span class="mono">LM-0 · 受审者</span></div><div class="f-desc">林默的人格镜像，冷静、精确，声称记得林默的一生。事故当晚它在实验室。它申请了继承——也延迟过那 93 秒的警报。</div></div></div>
+    <div class="b-fig" data-person="xuzhi"><div class="f-img"><img src="assets/p-xuzhi.jpg" alt="许栀" onerror="this.style.display='none'"></div><div class="f-main"><div class="f-name">许栀<span class="mono">XU ZHI · 前合伙人</span></div><div class="f-desc">零号早期架构师，与林默分道扬镳。公开主张「立即销毁零号」。她的证词需要核对。</div></div></div>
+    <div class="b-fig" data-person="chendu"><div class="f-img"><img src="assets/p-chendu.jpg" alt="陈渡" onerror="this.style.display='none'"></div><div class="f-main"><div class="f-name">陈渡<span class="mono">CHEN DU · 遗嘱执行人</span></div><div class="f-desc">代理律师，催促「从速认定」。其机构与遗产受益方存在服务关系——他要的是生效，未必是真相。</div></div></div>
     <p style="margin-top:14px">下一页之后你将直接进入审讯室。系统会暂停进程，用一组逐步引导教你全部操作。</p>` },
 ],
 

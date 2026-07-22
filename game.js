@@ -1568,7 +1568,7 @@ function showBriefing(i){
   const pages = DATA.BRIEFING;
   const page = pages[i];
   $("#briefTitle").textContent = page.title;
-  $("#briefBody").innerHTML = page.body;
+  $("#briefBody").innerHTML = (page.img ? `<div class="brief-hero"><img src="${page.img}" alt="" onerror="this.parentElement.style.display='none'"><div class="bh-vignette"></div></div>` : "") + page.body;
   $("#briefPage").textContent = `${i+1} / ${pages.length}`;
   $("#briefPrev").style.visibility = i === 0 ? "hidden" : "visible";
   const nextBtn = $("#briefNext");
