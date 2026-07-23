@@ -1,0 +1,14 @@
+{
+  "name": "protocol-zero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "零号遗嘱 · 纯前端叙事推理游戏",
+  "scripts": {
+    "validate": "node _validate.js",
+    "genart": "node _genart.js",
+    "fixwm": "node _removewm.js"
+  },
+  "devDependencies": {
+    "jimp": "^0.22.12"
+  }
+}

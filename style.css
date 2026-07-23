@@ -366,7 +366,21 @@ body::after{
 .sign-actions{display:flex;align-items:center;gap:18px}
 
 /* ============ 系统栏 ============ */
-#app{display:flex;flex-direction:column;height:100vh}
+#app{display:flex;flex-direction:column;height:100vh;position:relative}
+/* 幕场景背景层（随幕切换交叉淡入淡出） */
+#appBg{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:#050607 center/cover no-repeat;
+  opacity:0;transition:opacity .9s var(--ease-system);
+}
+#appBg.on{opacity:.34}
+#appBg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 50% 30%, transparent 20%, rgba(5,6,7,.72) 78%),
+    linear-gradient(180deg, rgba(5,6,7,.82) 0%, rgba(5,6,7,.62) 42%, rgba(5,6,7,.86) 100%);
+}
+#sysbar,#objBar,#stage,#composer{position:relative;z-index:1}
 #sysbar{
   flex:0 0 48px;display:flex;align-items:stretch;border-bottom:1px solid var(--line);
   background:linear-gradient(180deg,rgba(13,16,19,.95),rgba(8,10,12,.95));
@@ -494,6 +508,24 @@ body::after{
 .t-act{max-width:100%;text-align:center;margin:38px 0 30px}
 .t-act .a-title{font-family:var(--f-serif);font-size:26px;letter-spacing:.42em}
 .t-act .a-sub{font-family:var(--f-mono);font-size:10px;letter-spacing:.24em;color:var(--warning);margin-top:8px}
+/* 外部通讯接入（许栀 / 陈渡 等角色出场） */
+.t-comm{
+  max-width:min(560px,92%);margin:20px auto;padding:12px 14px;
+  border:1px solid var(--line);border-left:2px solid var(--signal-calm);
+  background:linear-gradient(180deg,rgba(18,22,26,.92),rgba(13,16,19,.92));
+  display:flex;gap:12px;align-items:flex-start;text-align:left;
+  animation:tCommIn var(--motion-normal) var(--ease-system);
+}
+@keyframes tCommIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.t-comm .c-img{flex:0 0 52px;height:64px;overflow:hidden;border:1px solid var(--line);background:var(--ink-050)}
+.t-comm .c-img img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:saturate(.7) brightness(.9)}
+.t-comm .c-main{flex:1;min-width:0}
+.t-comm .c-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.t-comm .c-name{font-size:13px;color:var(--text-primary);letter-spacing:.06em}
+.t-comm .c-name .mono{display:block;font-size:9px;color:var(--text-muted);letter-spacing:.14em;margin-top:2px}
+.t-comm .c-ch{font-family:var(--f-mono);font-size:9px;letter-spacing:.16em;color:var(--signal-calm);white-space:nowrap}
+.t-comm .c-body{font-size:13px;line-height:1.9;color:var(--text-secondary)}
+.t-comm .c-body b{color:var(--signal-calm);font-weight:400}
 .t-pin{
   position:absolute;right:-30px;top:0;width:22px;height:22px;display:flex;align-items:center;justify-content:center;
   border:1px solid var(--line);color:var(--text-muted);opacity:0;
@@ -673,6 +705,16 @@ body::after{
 .wb-side{
   border-left:1px solid var(--line);padding:28px 0 28px 24px;display:flex;flex-direction:column;gap:14px;
 }
+/* 档案关联人物卡 */
+.wb-person{
+  display:flex;gap:12px;border:1px solid var(--line);background:var(--ink-050);
+  padding:10px;align-items:center;
+}
+.wb-person .wp-img{flex:0 0 56px;height:70px;overflow:hidden;border:1px solid var(--line)}
+.wb-person .wp-img img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;filter:saturate(.7) brightness(.9)}
+.wb-person .wp-name{font-size:13px;color:var(--text-primary);letter-spacing:.06em}
+.wb-person .wp-name .mono{display:block;font-size:9px;color:var(--text-muted);letter-spacing:.14em;margin-top:3px}
+.wb-person .wp-role{font-size:10px;color:var(--text-secondary);line-height:1.8;margin-top:5px;letter-spacing:.06em}
 #archMeta{font-size:10px;line-height:2.1;color:var(--text-secondary);letter-spacing:.08em;white-space:pre-wrap}
 #archMeta b{color:var(--signal-calm);font-weight:400}
 

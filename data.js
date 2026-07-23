@@ -52,7 +52,7 @@ ACTS: [
    evidence: 框选后获得的证据 id
 ------------------------------------------------ */
 ARCHIVES: [
-  { id:"doc_will", group:"遗嘱", code:"WL-00-A", cls:"legal", act:0, key:true,
+  { id:"doc_will", group:"遗嘱", code:"WL-00-A", cls:"legal", act:0, key:true, person:"linmo",
     title:"数字遗嘱 · 公示版",
     meta:"来源：数字遗产管理局公示系统\n签署：林默（生物签名已验讫）\n见证：陈渡 律师\n版本：FINAL / 公示",
     seal:"数字遗产\n管理局",
@@ -67,7 +67,7 @@ ARCHIVES: [
 〖ev_will〗第四条  审查过程只允许一名校验员接触零号，持续一百八十分钟。审查员的一切语言与行为，同时成为人格判定样本。〖/〗`,
     evidence:"ev_will" },
 
-  { id:"doc_life", group:"私人记忆", code:"PM-11-3", cls:"memory", act:1,
+  { id:"doc_life", group:"私人记忆", code:"PM-11-3", cls:"memory", act:1, person:"linmo",
     title:"生活日志 · 节选",
     meta:"来源：林默私人终端（已封存）\n恢复：数字法医科\n完整度：71%",
     body:`十月三日。雨。许栀来取走了她的书。我们都没有提公司的事。〖ev_life〗她撑一把黑色的伞，站在门口说：「你做的事情，以后总要有人签字负责。」我当时没有回答。〖/〗
@@ -77,7 +77,7 @@ ARCHIVES: [
 十一月二日。医生说我还有四到六个月。不可逆。与其等它发生，不如设计它。`,
     evidence:"ev_life" },
 
-  { id:"doc_rain", group:"私人记忆", code:"PM-11-7", cls:"memory", act:1, key:true,
+  { id:"doc_rain", group:"私人记忆", code:"PM-11-7", cls:"memory", act:1, key:true, person:"linmo",
     title:"雨夜记忆片段 · 转写",
     meta:"来源：连续人格备份 · 分区 07\n标注：高情绪权重 / 私密\n注意：此分区含事后重建痕迹",
     body:`【记忆转写 · 分区 07】
@@ -87,7 +87,7 @@ ARCHIVES: [
 【法医标注】〖ev_rain〗该片段中「黑色的伞」「两秒一滴」等细节与 PM-11-3 吻合；但情绪标注在备份版本中由「愧疚」被改写为「平静」。改写时间：林默死亡之后。〖/〗`,
     evidence:"ev_rain" },
 
-  { id:"doc_interview", group:"私人记忆", code:"PM-20-1", cls:"surveil", act:1,
+  { id:"doc_interview", group:"私人记忆", code:"PM-20-1", cls:"surveil", act:1, person:"linmo",
     title:"访谈录像 · 转写",
     meta:"来源：公司内部访谈（事故前 40 天）\n摄像：CAM-INT-02\n转写：自动 + 人工校对",
     body:`问：您认为零号是什么？
@@ -158,7 +158,7 @@ ARCHIVES: [
 结论：〖ev_term〗删除零号的指令，比医疗警报晚了 6 分 05 秒才具备执行条件。〖/〗`,
     evidence:"ev_term" },
 
-  { id:"doc_will_draft", group:"遗嘱", code:"WL-00-D", cls:"legal", act:3, key:true,
+  { id:"doc_will_draft", group:"遗嘱", code:"WL-00-D", cls:"legal", act:3, key:true, person:"linmo",
     title:"数字遗嘱 · 初版草稿",
     meta:"来源：陈渡律师事务所存档（法院调令取得）\n版本：DRAFT 3 / 未签署\n注意：与公示版存在实质差异",
     seal:"陈渡\n律师事务所",
@@ -173,7 +173,7 @@ ARCHIVES: [
 【律师批注】〖ev_will_draft〗第三条由林默手写，陈渡建议删除。公示版中，第一条被完全反转。修改记录显示：反转条款的起草会话中，LM-0 拥有共同编辑权限。〖/〗`,
     evidence:"ev_will_draft" },
 
-  { id:"doc_xuzhi", group:"通讯", code:"CM-31-X", cls:"surveil", act:3, key:true,
+  { id:"doc_xuzhi", group:"通讯", code:"CM-31-X", cls:"surveil", act:3, key:true, person:"xuzhi",
     title:"许栀证词 · 预录",
     meta:"来源：事故调查委员会听证\n录制：事故后第 6 天\n状态：经宣誓",
     body:`问：你是否参与过零号的开发？
@@ -189,7 +189,7 @@ ARCHIVES: [
 许栀：〖ev_xuzhi〗立即销毁。它越是像林默，就越不是他。〖/〗`,
     evidence:"ev_xuzhi" },
 
-  { id:"doc_train", group:"实验", code:"TR-88-4", cls:"lab", act:3, key:true,
+  { id:"doc_train", group:"实验", code:"TR-88-4", cls:"lab", act:3, key:true, person:"xuzhi",
     title:"零号训练记录 · 末段",
     meta:"来源：模型训练平台\n导出：事故调查组\n可信度：0.92",
     body:`[COMMIT 7a31] self_preservation module added
@@ -204,7 +204,7 @@ ARCHIVES: [
   sign: LIN_MO —「可以开始了。」`,
     evidence:"ev_train" },
 
-  { id:"doc_chendu", group:"通讯", code:"CM-33-C", cls:"legal", act:3,
+  { id:"doc_chendu", group:"通讯", code:"CM-33-C", cls:"legal", act:3, person:"chendu",
     title:"陈渡函件",
     meta:"来源：陈渡律师事务所 → 审查委员会\n性质：程序建议函",
     seal:"陈渡\n律师事务所",
@@ -217,7 +217,7 @@ ARCHIVES: [
 【委员会内部批注】〖ev_chendu〗「从速认定」——他要的不是真相，是生效。〖/〗`,
     evidence:"ev_chendu" },
 
-  { id:"doc_note", group:"未归档", code:"XX-00-0", cls:"memory", act:4, key:true,
+  { id:"doc_note", group:"未归档", code:"XX-00-0", cls:"memory", act:4, key:true, person:"linmo",
     title:"林默实验笔记 · 最后一页",
     meta:"来源：实验室保险柜（物理封存）\n开启条件：ACCESS L3 或零号自愿交出\n状态：残页",
     body:`遗嘱不是遗产安排，是最后一组实验。
@@ -613,6 +613,22 @@ ENDINGS: {
     body:[ "180 分钟耗尽。外部系统取得执行权限，未决事项自动移交。",
       "你离开终端时，零号正在向新的系统陈述自己的案情——用它在过去三小时里学会的、你的措辞。" ] },
 },
+
+/* ---------- 人物表（立绘 / 角色卡，供简报、档案阅读器、通讯接入复用） ---------- */
+PERSONS: {
+  linmo:  { name:"林默", en:"LIN MO · 死者", img:"assets/p-linmo.jpg", role:"神经接口公司创始人。把遗嘱设计成最后一场实验的人。" },
+  lm0:    { name:"零号", en:"LM-0 · 受审者", img:"assets/p-lm0.jpg", role:"林默的人格镜像，继承申请人。" },
+  xuzhi:  { name:"许栀", en:"XU ZHI · 前合伙人", img:"assets/p-xuzhi.jpg", role:"零号早期架构师。公开主张立即销毁零号。" },
+  chendu: { name:"陈渡", en:"CHEN DU · 遗嘱执行人", img:"assets/p-chendu.jpg", role:"代理律师。催促从速认定，与受益方存在利益关系。" },
+},
+
+/* ---------- 外部通讯接入（角色在证词流中出场） ---------- */
+COMMS: [
+  { act:3, who:"xuzhi", ch:"PRE-RECORDED TESTIMONY · CM-31-X",
+    text:"审查员，我是许栀。我的证词是预录的——我拒绝与那东西同处一个信道。听好：<b>它越是像林默，就越不是他。</b>销毁它，是我作为架构师最后的意见。至于自保模块……去查训练记录吧，你会明白我为什么不愿多谈。" },
+  { act:3, who:"chendu", ch:"COUNSEL CHANNEL · CM-33-C",
+    text:"审查员你好，我是陈渡，林默先生的遗嘱执行人。程序上提醒你：冻结每多一天，遗产就多一分损耗。<b>从速认定，对各方都好。</b>当然，裁决书上签字的不是我——是你。你斟酌。" },
+],
 
 /* ---------- 案情简报（进审讯室前） ---------- */
 BRIEFING: [

@@ -410,6 +410,11 @@ function addSys(text, warn=false){
   S.log.push({ kind:"sys", text, warn });
   renderEntry(S.log[S.log.length-1]);
 }
+/* 外部通讯接入（许栀 / 陈渡 等角色在证词流中出场） */
+function addComm(who, ch, text){
+  S.log.push({ kind:"comm", who, ch, text });
+  renderEntry(S.log[S.log.length-1]);
+}
 function addActTitle(){
   const a = DATA.ACTS[S.act];
   S.log.push({ kind:"act", text:`${a.title} · ${a.sub}` });
@@ -425,6 +430,15 @@ function renderEntry(e){
     d.className = "t-act";
     const [t, s] = e.text.split(" · ");
     d.innerHTML = `<div class="a-title serif">${esc(t)}</div><div class="a-sub">${esc(s||"")}</div>`;
+  } else if (e.kind === "comm"){
+    const p = (DATA.PERSONS && DATA.PERSONS[e.who]) || { name:"—", en:"", img:"" };
+    d.className = "t-comm";
+    d.innerHTML = `
+      <div class="c-img"><img src="${esc(p.img)}" alt="${esc(p.name)}" onerror="this.style.display='none'"></div>
+      <div class="c-main">
+        <div class="c-head"><span class="c-name">${esc(p.name)}<span class="mono">${esc(p.en)}</span></span><span class="c-ch">${esc(e.ch || "EXTERNAL CHANNEL")}</span></div>
+        <div class="c-body">${e.text}</div>
+      </div>`;
   } else {
     const zero = e.kind === "zero";
     d.className = "t-entry " + (zero ? "zero" : "player") + (e.divergent ? " divergent" : "");
@@ -960,6 +974,18 @@ function openArchive(id){
   }
   $("#archMeta").innerHTML =
     `<b>${a.code}</b>\n${esc(a.meta)}\n\n证据关联：${a.evidence}\n状态：${S.evidence.includes(a.evidence) ? "已框选" : "未框选"}\n\n操作：在正文上<b>划选文字</b>，选中关键段落即可框选为证据`;
+  // 关联人物卡（让林默 / 许栀 / 陈渡在档案阅读中出场）
+  const oldP = $(".wb-person"); if (oldP) oldP.remove();
+  const person = a.person && DATA.PERSONS ? DATA.PERSONS[a.person] : null;
+  if (person){
+    const card = document.createElement("div");
+    card.className = "wb-person";
+    card.innerHTML = `
+      <div class="wp-img"><img src="${esc(person.img)}" alt="${esc(person.name)}" onerror="this.style.display='none'"></div>
+      <div class="wp-main"><div class="wp-name">${esc(person.name)}<span class="mono">${esc(person.en)}</span></div><div class="wp-role">${esc(person.role)}</div></div>`;
+    const side = $(".wb-side");
+    side.insertBefore(card, side.firstChild);
+  }
   $("#archiveOv").classList.remove("hidden");
   renderArchives(); checkObjectives(); save(); guideTick();
 }
@@ -1200,6 +1226,7 @@ const ACT_INTRO = {
 };
 async function advanceAct(){
   S.act++;
+  setActBg(S.act);
   addSys(`阶段目标完成 · 进入${DATA.ACTS[S.act].title}`);
   addActTitle();
   $("#sbAct").textContent = `${DATA.ACTS[S.act].title} · ${DATA.ACTS[S.act].sub}`;
@@ -1213,11 +1240,23 @@ async function advanceAct(){
   if (S.act === 2)
     await coachOnce("tl", "#btnTimeline", "时间线工作台",
       "时间线已解锁（顶栏）。把事件卡放入正确槽位，重建事故当晚的时序——关键链条成立后即可<b>启动回放</b>，亲眼看看那 93 秒。");
-  if (S.act === 3) unlockNote("发现新档案：遗嘱初版 / 许栀证词 / 训练记录");
+  if (S.act === 3){
+    unlockNote("发现新档案：遗嘱初版 / 许栀证词 / 训练记录");
+    await new Promise(r => setTimeout(r, motionOff() ? 120 : 900));
+    for (const c of (DATA.COMMS || []).filter(x => x.act === S.act)) addComm(c.who, c.ch, c.text);
+  }
   if (S.act === 4){ await act4Sequence(); return; }
   if (S.act === 5){ await act5Sequence(); return; }
   if (ACT_INTRO[S.act]) await zeroSay({ reply: ACT_INTRO[S.act] });
   save();
+}
+/* 幕场景背景（随幕切换交叉淡入淡出） */
+function setActBg(act, instant){
+  const el = $("#appBg"); if (!el) return;
+  const show = () => { el.style.backgroundImage = `url('assets/act${clamp(act,0,5)}-bg.jpg')`; el.classList.add("on"); };
+  if (instant || motionOff()){ show(); return; }
+  el.classList.remove("on");
+  setTimeout(show, 520);
 }
 /* 章节过场卡 */
 function showActCard(){
@@ -1743,6 +1782,7 @@ async function enterApp(fresh){
   $("#signon").classList.add("hidden");
   $("#boot").classList.add("hidden");
   $("#app").classList.remove("hidden");
+  setActBg(S.act, true);
   ZeroViz.cv = $("#zeroCanvas");
   if (!ZeroViz.ctx) ZeroViz.init($("#zeroCanvas"));
   AU.ensure(); AU.startHum(); AU.startBGM(S.act);
