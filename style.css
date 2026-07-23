@@ -29,12 +29,27 @@
 html,body{height:100%}
 body{
   background:
-    radial-gradient(circle at 50% 28%, rgba(123,143,143,.055), transparent 34%),
-    linear-gradient(180deg,#0b0e10 0%,#07090a 55%,#050607 100%);
+    /* 顶层：缓慢漂移的神秘光晕 */
+    radial-gradient(ellipse at 20% 20%, rgba(82,108,111,.18), transparent 42%),
+    radial-gradient(ellipse at 80% 70%, rgba(98,70,75,.12), transparent 38%),
+    /* 中层：极淡的数据网格 */
+    linear-gradient(90deg, rgba(198,215,213,.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(198,215,213,.03) 1px, transparent 1px),
+    /* 底层：深邃渐变 */
+    linear-gradient(180deg,#0d1114 0%,#080a0c 45%,#040506 100%);
+  background-size:
+    120% 120%, 120% 120%,
+    48px 48px, 48px 48px,
+    100% 100%;
+  animation:bgDrift 24s ease-in-out infinite alternate;
   color:var(--text-primary);
   font-family:var(--f-sans); font-weight:350; font-size:var(--type-body);
   overflow:hidden;
   -webkit-font-smoothing:antialiased;
+}
+@keyframes bgDrift{
+  0%   { background-position: 0% 0%, 100% 100%, 0 0, 0 0, 0 0; }
+  100% { background-position: 8% 6%, 92% 94%, 0 0, 0 0, 0 0; }
 }
 body.bigfont{font-size:18px}
 ::selection{background:rgba(169,187,183,.28);color:var(--text-primary)}
@@ -295,7 +310,24 @@ body::after{
   transition:border-color var(--motion-fast),color var(--motion-fast);
 }
 .mini-op:hover{border-color:var(--line-active);color:var(--text-primary)}
-.overlay{position:fixed;inset:0;z-index:300;background:rgba(5,6,7,.72);display:flex;align-items:center;justify-content:center}
+.overlay{
+  position:fixed;inset:0;z-index:300;
+  display:flex;align-items:center;justify-content:center;
+  background:
+    linear-gradient(180deg, rgba(6,8,10,.86), rgba(4,5,6,.92)),
+    repeating-linear-gradient(180deg, transparent 0, transparent 2px, rgba(198,215,213,.02) 2px, rgba(198,215,213,.02) 3px),
+    radial-gradient(circle at 50% 50%, rgba(18,24,28,.55), rgba(4,5,6,.85));
+  backdrop-filter:blur(8px) saturate(1.1);
+  -webkit-backdrop-filter:blur(8px) saturate(1.1);
+}
+.overlay::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg, transparent 96%, rgba(169,187,183,.04) 100%);
+  background-size:100% 4px;
+  animation:scanMove 6s linear infinite;
+  opacity:.35;
+}
+@keyframes scanMove{0%{background-position:0 0}100%{background-position:0 48px}}
 
 /* ============ 启动页 ============ */
 #boot{position:fixed;inset:0;z-index:100;overflow:hidden}
@@ -373,13 +405,21 @@ body::after{
   background:#050607 center/cover no-repeat;
   opacity:0;transition:opacity .9s var(--ease-system);
 }
-#appBg.on{opacity:.34}
+#appBg.on{opacity:.38}
+#appBg::before{
+  content:"";position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(180deg, transparent 0, transparent 3px, rgba(198,215,213,.025) 3px, rgba(198,215,213,.025) 4px);
+  mix-blend-mode:overlay;
+  animation:bgScan 8s linear infinite;
+}
 #appBg::after{
   content:"";position:absolute;inset:0;
   background:
-    radial-gradient(circle at 50% 30%, transparent 20%, rgba(5,6,7,.72) 78%),
-    linear-gradient(180deg, rgba(5,6,7,.82) 0%, rgba(5,6,7,.62) 42%, rgba(5,6,7,.86) 100%);
+    radial-gradient(circle at 50% 30%, transparent 18%, rgba(5,6,7,.75) 78%),
+    linear-gradient(180deg, rgba(5,6,7,.82) 0%, rgba(5,6,7,.55) 42%, rgba(5,6,7,.88) 100%);
 }
+@keyframes bgScan{0%{transform:translateY(0)}100%{transform:translateY(47px)}}
 #sysbar,#objBar,#stage,#composer{position:relative;z-index:1}
 #sysbar{
   flex:0 0 48px;display:flex;align-items:stretch;border-bottom:1px solid var(--line);
@@ -412,9 +452,19 @@ body::after{
   gap:12px;padding:12px 32px;
 }
 #railArchives,#railAnalysis{
-  background:linear-gradient(180deg,var(--ink-100),var(--ink-050));border:1px solid var(--line);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 8px 32px rgba(0,0,0,.22);
+  background:
+    linear-gradient(180deg, rgba(13,16,19,.92), rgba(8,10,12,.92));
+  border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 8px 32px rgba(0,0,0,.28);
   display:flex;flex-direction:column;min-height:0;
+  position:relative;
+}
+#railArchives::before,#railAnalysis::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(198,215,213,.02) 100%),
+    repeating-linear-gradient(180deg, transparent 0, transparent 4px, rgba(198,215,213,.01) 4px, rgba(198,215,213,.01) 5px);
+  opacity:.6;
 }
 .rail-head{
   flex:0 0 40px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;
