@@ -18,7 +18,8 @@ const WM_W = 130, WM_H = 55; // 右下角水印区估算尺寸
         img.setPixelColor(c, x, y);
       }
     }
+    img.quality(80);
     await img.writeAsync(p);
-    console.log("wm-removed", f, `${w}x${h}`);
+    console.log("wm-removed", f, `${w}x${h}`, `${(fs.statSync(p).size/1024).toFixed(0)}KB`);
   }
 })();

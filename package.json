@@ -6,7 +6,8 @@
   "scripts": {
     "validate": "node _validate.js",
     "genart": "node _genart.js",
-    "fixwm": "node _removewm.js"
+    "fixwm": "node _fixwatermark.js && node _removewm.js",
+    "compress": "node _compress.js && node _finalportrait.js && node _finalbg.js"
   },
   "devDependencies": {
     "jimp": "^0.22.12"
